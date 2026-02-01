@@ -131,26 +131,6 @@ To use the dashboard:
 2. Enter your Worker URL in the configuration section
 3. Click "Load Dashboard" to view analytics
 
-## Data Model
-
-Feedback entries include:
-- Source (github, discord, email, twitter, etc.)
-- Content (the actual feedback text)
-- Author (optional)
-- Sentiment (positive, negative, neutral)
-- Urgency (critical, high, medium, low)
-- Value Score (1-10, where higher = more valuable to address)
-- Themes (comma-separated list of extracted themes)
-- Raw Data (JSON string of original data)
-
-## Future Enhancements
-
-- Integration with real platforms (GitHub API, Discord webhooks, etc.)
-- Scheduled reports sent to Slack/Discord
-- Advanced AI analysis for theme extraction
-- User authentication and multi-tenant support
-- Export functionality (CSV, PDF reports)
-
 ## License
 
 MIT
