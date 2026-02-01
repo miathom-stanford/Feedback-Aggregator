@@ -1,0 +1,16 @@
+name = "feedback-aggregator"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "feedback-db"
+database_id = "your-database-id-here"
+
+[env.production]
+routes = [
+  { pattern = "feedback-aggregator.your-domain.workers.dev", zone_name = "your-domain.com" }
+]
