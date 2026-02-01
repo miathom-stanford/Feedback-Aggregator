@@ -28,16 +28,6 @@ This solution leverages multiple Cloudflare Developer Platform products to creat
    - Provides fast global CDN delivery for the dashboard
    - Enables easy deployment and updates
 
-### Why These Products?
-
-- **Workers**: Provides serverless compute at the edge, ensuring low latency globally. Perfect for API endpoints that need to be fast and scalable.
-
-- **AI**: Cloudflare's AI Workers enable on-edge AI inference, allowing real-time sentiment analysis without external API calls or additional costs. The sentiment analysis model runs directly in the Worker.
-
-- **D1**: SQLite database that's perfect for this use case - simple schema, fast queries, and integrated with Workers. No need for complex database management.
-
-- **Pages**: Simple static hosting for the dashboard with global CDN, making it fast and reliable for users worldwide.
-
 ## Features
 
 - **Multi-Source Aggregation**: Collect feedback from GitHub, Discord, Email, Twitter, and more
