@@ -1,0 +1,21 @@
+{
+  "name": "feedback-aggregator",
+  "version": "1.0.0",
+  "description": "Product feedback aggregation and analysis tool",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create feedback-db",
+    "db:migrate": "wrangler d1 execute feedback-db --file=./schema.sql",
+    "db:seed": "wrangler d1 execute feedback-db --file=./seed.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^4.61.1"
+  },
+  "dependencies": {
+    "hono": "^4.3.0"
+  }
+}

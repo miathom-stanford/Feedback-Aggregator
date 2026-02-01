@@ -1,0 +1,17 @@
+-- Mock feedback data from various sources
+INSERT INTO feedback (source, content, author, sentiment, urgency, value_score, themes, raw_data) VALUES
+('github', 'The API rate limiting is too strict. We keep hitting 429 errors in production.', 'dev_user_123', 'negative', 'high', 8, 'API,Rate Limiting,Production Issues', '{"issue_number": 1234, "labels": ["bug", "api"]}'),
+('discord', 'Love the new dashboard design! Much cleaner interface.', 'user_alice', 'positive', 'low', 3, 'UI/UX,Dashboard', '{"channel": "feedback", "message_id": "abc123"}'),
+('email', 'Feature request: Can we add dark mode support? Many users have been asking.', 'support@example.com', 'neutral', 'medium', 6, 'Feature Request,UI/UX,Accessibility', '{"email_id": "email_001", "subject": "Dark Mode Request"}'),
+('twitter', 'Just tried the new feature and it crashed my app. Very disappointed.', '@frustrated_dev', 'negative', 'high', 9, 'Bugs,Stability,Critical Issues', '{"tweet_id": "tweet_456", "retweets": 12}'),
+('github', 'Documentation for the authentication flow is unclear. Spent hours trying to figure it out.', 'new_dev_99', 'negative', 'medium', 7, 'Documentation,Developer Experience', '{"issue_number": 1235, "labels": ["documentation"]}'),
+('discord', 'The search functionality could be faster. Takes 3-4 seconds to return results.', 'user_bob', 'neutral', 'medium', 5, 'Performance,Search', '{"channel": "feedback", "message_id": "def456"}'),
+('email', 'Thank you for fixing the bug! The latest update works perfectly now.', 'happy_user@example.com', 'positive', 'low', 2, 'Bug Fixes,User Satisfaction', '{"email_id": "email_002", "subject": "Thank You"}'),
+('twitter', 'This product is a game changer! Best tool I have used this year.', '@happy_customer', 'positive', 'low', 1, 'User Satisfaction,Product Praise', '{"tweet_id": "tweet_789", "retweets": 45}'),
+('github', 'Would be great to have webhook support for real-time updates.', 'integration_dev', 'neutral', 'medium', 6, 'Feature Request,Integrations,Webhooks', '{"issue_number": 1236, "labels": ["enhancement", "feature-request"]}'),
+('discord', 'The mobile app crashes when uploading large files. Please fix ASAP!', 'mobile_user', 'negative', 'high', 9, 'Mobile,Bugs,File Upload', '{"channel": "bugs", "message_id": "ghi789"}'),
+('email', 'Can you add support for custom themes? Our team wants to match our brand colors.', 'enterprise@bigcorp.com', 'neutral', 'low', 4, 'Feature Request,Customization,Enterprise', '{"email_id": "email_003", "subject": "Custom Themes"}'),
+('twitter', 'Security vulnerability found in authentication. Please patch immediately!', '@security_researcher', 'negative', 'critical', 10, 'Security,Vulnerability,Critical', '{"tweet_id": "tweet_101", "retweets": 234}'),
+('github', 'The onboarding flow is confusing. New users dont know where to start.', 'ux_designer', 'negative', 'medium', 6, 'UX,Onboarding,User Experience', '{"issue_number": 1237, "labels": ["ux", "enhancement"]}'),
+('discord', 'Great job on the performance improvements! Everything feels snappier now.', 'power_user', 'positive', 'low', 2, 'Performance,User Satisfaction', '{"channel": "general", "message_id": "jkl012"}'),
+('email', 'We need better error messages. Current ones are too technical for our users.', 'pm@startup.io', 'neutral', 'medium', 5, 'Error Handling,UX,Developer Experience', '{"email_id": "email_004", "subject": "Error Messages"}');

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Aggregator Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .config-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .config-section input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .config-section input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-label {
+            min-width: 100px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .bar {
+            flex: 1;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            transition: width 0.3s ease;
+        }
+
+        .feedback-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .feedback-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feedback-item {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .feedback-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .feedback-source {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .source-github { background: #24292e; color: white; }
+        .source-discord { background: #5865F2; color: white; }
+        .source-email { background: #34a853; color: white; }
+        .source-twitter { background: #1da1f2; color: white; }
+
+        .feedback-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-sentiment-positive { background: #d4edda; color: #155724; }
+        .badge-sentiment-negative { background: #f8d7da; color: #721c24; }
+        .badge-sentiment-neutral { background: #d1ecf1; color: #0c5460; }
+
+        .badge-urgency-critical { background: #f8d7da; color: #721c24; }
+        .badge-urgency-high { background: #fff3cd; color: #856404; }
+        .badge-urgency-medium { background: #d1ecf1; color: #0c5460; }
+        .badge-urgency-low { background: #d4edda; color: #155724; }
+
+        .badge-value {
+            background: #667eea;
+            color: white;
+        }
+
+        .feedback-content {
+            color: #333;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .feedback-themes {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .theme-tag {
+            padding: 4px 10px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Feedback Aggregator Dashboard</h1>
+            <p class="subtitle">Aggregate and analyze product feedback from multiple sources</p>
+        </header>
+
+        <div class="config-section">
+            <input type="text" id="apiUrl" placeholder="Enter your Cloudflare Workers API URL (e.g., https://your-worker.workers.dev)" value="https://feedback-aggregator.miathom.workers.dev">
+            <button onclick="loadData()" style="padding: 12px 24px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">Load Dashboard</button>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="dashboard" style="display: none;">
+            <div class="stats-grid" id="statsGrid"></div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Sentiment Distribution</div>
+                    <div class="bar-chart" id="sentimentChart"></div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Urgency Distribution</div>
+                    <div class="bar-chart" id="urgencyChart"></div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Source Distribution</div>
+                    <div class="bar-chart" id="sourceChart"></div>
+                </div>
+            </div>
+
+            <div class="feedback-section">
+                <div class="filters" id="filters"></div>
+                <div class="feedback-list" id="feedbackList"></div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">Loading...</div>
+    </div>
+
+    <script>
+        let apiUrl = '';
+        let allFeedback = [];
+        let currentFilters = {
+            source: null,
+            sentiment: null,
+            urgency: null
+        };
+
+        async function loadData() {
+            apiUrl = document.getElementById('apiUrl').value.trim();
+            if (!apiUrl) {
+                showError('Please enter a valid API URL');
+                return;
+            }
+
+            // Remove trailing slash
+            apiUrl = apiUrl.replace(/\/$/, '');
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+
+            try {
+                // Load stats
+                const statsResponse = await fetch(`${apiUrl}/api/stats`);
+                if (!statsResponse.ok) throw new Error('Failed to load stats');
+                const stats = await statsResponse.json();
+
+                // Load feedback
+                const feedbackResponse = await fetch(`${apiUrl}/api/feedback?limit=100`);
+                if (!feedbackResponse.ok) throw new Error('Failed to load feedback');
+                const feedbackData = await feedbackResponse.json();
+                allFeedback = feedbackData.feedback;
+
+                // Load themes
+                const themesResponse = await fetch(`${apiUrl}/api/themes`);
+                if (!themesResponse.ok) throw new Error('Failed to load themes');
+                const themes = await themesResponse.json();
+
+                renderDashboard(stats, themes);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                showError(`Error loading data: ${error.message}`);
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function renderDashboard(stats, themes) {
+            // Render stats
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${stats.total}</div>
+                    <div class="stat-label">Total Feedback</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.average_value_score.toFixed(1)}</div>
+                    <div class="stat-label">Avg Value Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${themes.themes.length}</div>
+                    <div class="stat-label">Unique Themes</div>
+                </div>
+            `;
+
+            // Render charts
+            renderChart('sentimentChart', stats.sentiment);
+            renderChart('urgencyChart', stats.urgency);
+            renderChart('sourceChart', stats.sources);
+
+            // Render filters
+            renderFilters(stats);
+
+            // Render feedback
+            renderFeedback();
+        }
+
+        function renderChart(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div style="color: #999; text-align: center; padding: 20px;">No data available</div>';
+                return;
+            }
+
+            const maxCount = Math.max(...data.map(d => d.count));
+            
+            container.innerHTML = data.map(item => {
+                const percentage = (item.count / maxCount) * 100;
+                return `
+                    <div class="bar-item">
+                        <div class="bar-label">${item.sentiment || item.urgency || item.source}</div>
+                        <div class="bar">
+                            <div class="bar-fill" style="width: ${percentage}%">${item.count}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderFilters(stats) {
+            const filtersContainer = document.getElementById('filters');
+            const sources = [...new Set(stats.sources.map(s => s.source))];
+            const sentiments = [...new Set(stats.sentiment.map(s => s.sentiment))];
+            const urgencies = [...new Set(stats.urgency.map(u => u.urgency))];
+
+            filtersContainer.innerHTML = `
+                <button class="filter-btn ${!currentFilters.source ? 'active' : ''}" onclick="setFilter('source', null)">All Sources</button>
+                ${sources.map(s => `<button class="filter-btn ${currentFilters.source === s ? 'active' : ''}" onclick="setFilter('source', '${s}')">${s}</button>`).join('')}
+                <button class="filter-btn ${!currentFilters.sentiment ? 'active' : ''}" onclick="setFilter('sentiment', null)">All Sentiments</button>
+                ${sentiments.map(s => `<button class="filter-btn ${currentFilters.sentiment === s ? 'active' : ''}" onclick="setFilter('sentiment', '${s}')">${s}</button>`).join('')}
+                <button class="filter-btn ${!currentFilters.urgency ? 'active' : ''}" onclick="setFilter('urgency', null)">All Urgencies</button>
+                ${urgencies.map(u => `<button class="filter-btn ${currentFilters.urgency === u ? 'active' : ''}" onclick="setFilter('urgency', '${u}')">${u}</button>`).join('')}
+            `;
+        }
+
+        function setFilter(type, value) {
+            currentFilters[type] = value;
+            renderFeedback();
+            // Reload filters to update active state
+            loadData();
+        }
+
+        function renderFeedback() {
+            const feedbackList = document.getElementById('feedbackList');
+            
+            let filtered = allFeedback;
+            if (currentFilters.source) {
+                filtered = filtered.filter(f => f.source === currentFilters.source);
+            }
+            if (currentFilters.sentiment) {
+                filtered = filtered.filter(f => f.sentiment === currentFilters.sentiment);
+            }
+            if (currentFilters.urgency) {
+                filtered = filtered.filter(f => f.urgency === currentFilters.urgency);
+            }
+
+            if (filtered.length === 0) {
+                feedbackList.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">No feedback matches the selected filters</div>';
+                return;
+            }
+
+            feedbackList.innerHTML = filtered.map(item => {
+                const sourceClass = `source-${item.source.toLowerCase()}`;
+                const sentimentClass = `badge-sentiment-${item.sentiment}`;
+                const urgencyClass = `badge-urgency-${item.urgency}`;
+                const themes = item.themes ? item.themes.split(',').map(t => t.trim()) : [];
+
+                return `
+                    <div class="feedback-item">
+                        <div class="feedback-header">
+                            <span class="feedback-source ${sourceClass}">${item.source}</span>
+                            <div class="feedback-badges">
+                                <span class="badge ${sentimentClass}">${item.sentiment}</span>
+                                <span class="badge ${urgencyClass}">${item.urgency}</span>
+                                <span class="badge badge-value">Value: ${item.value_score}/10</span>
+                            </div>
+                        </div>
+                        <div class="feedback-content">${escapeHtml(item.content)}</div>
+                        ${themes.length > 0 ? `
+                            <div class="feedback-themes">
+                                ${themes.map(theme => `<span class="theme-tag">${escapeHtml(theme)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        ${item.author ? `<div style="margin-top: 10px; font-size: 12px; color: #999;">By ${escapeHtml(item.author)}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-load if URL is in localStorage, otherwise use default deployed URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUrl = localStorage.getItem('feedbackApiUrl');
+            const defaultUrl = 'https://feedback-aggregator.miathom.workers.dev';
+            if (savedUrl) {
+                document.getElementById('apiUrl').value = savedUrl;
+            } else {
+                document.getElementById('apiUrl').value = defaultUrl;
+            }
+        });
+
+        // Save URL on load
+        document.getElementById('apiUrl').addEventListener('change', (e) => {
+            localStorage.setItem('feedbackApiUrl', e.target.value);
+        });
+    </script>
+</body>
+</html>
